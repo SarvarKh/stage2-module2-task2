@@ -30,20 +30,11 @@ public class LoginServlet extends HttpServlet {
                 req.getParameter("login").equals(allUsers.get(1)) &&
                 !req.getParameter("password").isEmpty()) {
             session.setAttribute("user", req.getParameter("login"));
-            resp.sendRedirect("/user/hello.jsp");
+            RequestDispatcher dispatcher = req.getRequestDispatcher("/user/hello.jsp");
+            dispatcher.forward(req, resp);
         } else {
             RequestDispatcher dispatcher = req.getRequestDispatcher("/login.jsp");
             dispatcher.forward(req, resp);
         }
-
-//
-//        String userLogin = req.getParameter("login");
-//        String password = req.getParameter("password");
-//
-//
-//
-//        String htmlResponse = "<html><h3>Welcome to Sarvar</h3></html>";
-//        PrintWriter writer = resp.getWriter();
-//        writer.write(htmlResponse + " " + userLogin + password + allUsers);
     }
 }
