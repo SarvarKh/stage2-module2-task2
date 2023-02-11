@@ -26,12 +26,9 @@ public class LoginServlet extends HttpServlet {
         List<String> allUsers = users.getUsers();
 
         // Check the request parameters
-        if (req.getParameter("login").equals(allUsers.get(0)) ||
-                req.getParameter("login").equals(allUsers.get(1)) &&
-                !req.getParameter("password").isEmpty()) {
+        if (allUsers.contains(req.getParameter("login"))) {
             session.setAttribute("user", req.getParameter("login"));
-            RequestDispatcher dispatcher = req.getRequestDispatcher("/user/hello.jsp");
-            dispatcher.forward(req, resp);
+            resp.sendRedirect("/user/hello.jsp");
         } else {
             RequestDispatcher dispatcher = req.getRequestDispatcher("/login.jsp");
             dispatcher.forward(req, resp);

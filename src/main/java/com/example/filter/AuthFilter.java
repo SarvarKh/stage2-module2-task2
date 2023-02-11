@@ -3,10 +3,11 @@ package com.example.filter;
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebFilter(urlPatterns = "/user/*")
+@WebFilter("/user/*")
 public class AuthFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -16,20 +17,17 @@ public class AuthFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest)servletRequest;
-        if (request.getRequestURI().startsWith("/user")) {
-            HttpSession session = request.getSession();
-            if (session.getAttribute("user") == null) {
-                RequestDispatcher dispatcher = request.getRequestDispatcher("/login.jsp");
-                dispatcher.forward(request, servletResponse);
-            }
+        HttpServletResponse response = (HttpServletResponse)servletResponse;
+        HttpSession session = request.getSession();
+        if (session.getAttribute("user") == null) {
+            response.sendRedirect("/login.jsp");
         }
 
-        filterChain.doFilter(request, servletResponse);
+        filterChain.doFilter(request, response);
     }
 
     @Override
     public void destroy() {
         Filter.super.destroy();
     }
-    //write your code here!
 }
